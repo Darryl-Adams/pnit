@@ -1,0 +1,148 @@
+openapi: 3.0.3
+info:
+  title: LinkedIn Network Intelligence API
+  description: API for querying and managing LinkedIn network data with conversational interactions.
+  version: 1.0.0
+servers:
+  - url: https://api.yourdomain.com
+paths:
+  /api/query:
+    post:
+      summary: Submit a conversational query
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                history:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                        enum: [system, user, assistant]
+                      content:
+                        type: string
+      responses:
+        '200':
+          description: Successful query response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  assistant_message:
+                    type: string
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        first_name:
+                          type: string
+                        last_name:
+                          type: string
+                        company:
+                          type: string
+                        position:
+                          type: string
+                        profile_url:
+                          type: string
+
+  /api/upload-connections:
+    post:
+      summary: Upload LinkedIn Connections CSV
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful upload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  last_update:
+                    type: string
+                    format: date-time
+
+  /api/history:
+    get:
+      summary: Fetch past query history
+      responses:
+        '200':
+          description: Successful history retrieval
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  history:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        query_text:
+                          type: string
+                        input_mode:
+                          type: string
+                          enum: [text, voice]
+                        timestamp:
+                          type: string
+                          format: date-time
+
+  /api/delete-history:
+    post:
+      summary: Delete a query or all history
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query_id:
+                  type: string
+                delete_all:
+                  type: boolean
+      responses:
+        '200':
+          description: Deletion confirmation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+
+  /api/settings:
+    get:
+      summary: Fetch user settings
+      responses:
+        '200':
+          description: User settings returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  voice_output_enabled:
+                    type: boolean

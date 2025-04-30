@@ -1,0 +1,42 @@
+service: pnit-backend
+frameworkVersion: '3'
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-west-2
+  environment:
+    OPENAI_API_KEY: ${env:OPENAI_API_KEY}
+    DATABASE_URL: ${env:DATABASE_URL}
+functions:
+  query:
+    handler: functions/query/handler.main
+    events:
+      - http:
+          path: api/query
+          method: post
+  uploadConnections:
+    handler: functions/uploadConnections/handler.main
+    events:
+      - http:
+          path: api/upload-connections
+          method: post
+  history:
+    handler: functions/history/handler.main
+    events:
+      - http:
+          path: api/history
+          method: get
+  deleteHistory:
+    handler: functions/deleteHistory/handler.main
+    events:
+      - http:
+          path: api/delete-history
+          method: post
+  settings:
+    handler: functions/settings/handler.main
+    events:
+      - http:
+          path: api/settings
+          method: get
+plugins:
+  - serverless-offline
