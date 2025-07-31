@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import component styles */
+@import './header.css';
+
+/* Custom base styles */
+@layer base {
+  :root {
+    --primary: #0052a5;
+    --secondary: #006459;
+  }
+
+  /* High contrast mode overrides */
+  @media (prefers-contrast: more) {
+    :root {
+      --high-contrast-bg: #000000;
+      --high-contrast-text: #ffffff;
+    }
+
+    body {
+      background-color: var(--high-contrast-bg);
+      color: var(--high-contrast-text);
+    }
+  }
+}
+
+/* Custom components */
+@layer components {
+  .nav-link {
+    @apply transition-colors duration-200;
+  }
+}
+
+/* Custom utilities */
+@layer utilities {
+  .focus-outline {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+  }
+}
